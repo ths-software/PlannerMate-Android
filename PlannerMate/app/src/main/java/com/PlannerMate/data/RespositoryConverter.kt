@@ -20,11 +20,11 @@ fun Cita.toCitaApi() = CitaApi(
 fun CitaApi.toCita() = Cita(
     this.idCita,
     this.nombre,
-    this.contacto,
+    this.contacto ?: "",
     this.fecha,
     this.descripcion,
-    this.trabajador,
-    this.cliente
+    this.trabajador ?: Trabajador(), // Asigna un Trabajador vacío si trabajador es nulo
+    this.cliente ?: Cliente() // Asigna un Cliente vacío si cliente es nulo
 )
 
 
@@ -48,8 +48,7 @@ fun Trabajador.toTrabajadorApi() = TrabajadorApi(
     this.contacto
 )
 
-fun TrabajadorApi.toTrabajador() = Trabajador(
-    this.idTrabajador,
-    this.nombre,
-    this.contacto
-)
+fun TrabajadorApi.toTrabajador(): Trabajador {
+    val contactoNotNull = contacto ?: ""
+    return Trabajador(idTrabajador, nombre, contactoNotNull)
+}

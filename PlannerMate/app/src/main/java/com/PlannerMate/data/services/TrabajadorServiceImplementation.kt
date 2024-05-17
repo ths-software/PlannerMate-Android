@@ -9,12 +9,13 @@ class TrabajadorServiceImplementation @Inject constructor(
     private val logTag:String = "OkHttp"
     suspend fun get() : List<TrabajadorApi>
     {
+        Log.d("Resultado", "entramos aqui2")
         val mensajeError = "No se ha podido obtener los trabajadores"
         try {
             val response = trabajadorService.trabajadores()
             if(response.isSuccessful)
             {
-                Log.d(logTag, response.toString())
+                Log.d(logTag,"Respuesta trabajadores: $response.toString()" )
                 val dato = response.body()
                 return dato ?: throw ApiServicesException("No hay datos")
             }

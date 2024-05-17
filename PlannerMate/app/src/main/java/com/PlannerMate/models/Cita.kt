@@ -9,6 +9,6 @@ data class Cita(
     val contacto : String,
     val fecha : String,
     val descripcion : String,
-    val trabajador : TrabajadorApi,
-    val cliente : ClienteApi
+    val trabajador : Trabajador,
+    val cliente : Cliente
 )

@@ -16,7 +16,7 @@ import com.PlannerMate.R
 
 @Composable
 fun CircularImageFromResource(
-    idImageResource: Int, contentDescription: String, size: Dp = Dp(130f)
+    idImageResource: Int, contentDescription: String, size: Dp = Dp(250f)
 ) {
 
     Image(

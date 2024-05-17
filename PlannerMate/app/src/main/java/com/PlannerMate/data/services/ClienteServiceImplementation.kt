@@ -36,7 +36,7 @@ class ClienteServiceImplementation @Inject constructor(
     suspend fun getOne(id : Int) : ClienteApi{
         val mensajeError = "No se ha podido obtener el cliente"
         try {
-            val response = clienteService.cliente()
+            val response = clienteService.cliente(id)
             if(response.isSuccessful)
             {
                 Log.d(logTag, response.toString())

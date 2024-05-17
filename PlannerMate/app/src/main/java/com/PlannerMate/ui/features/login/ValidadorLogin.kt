@@ -16,7 +16,7 @@ class ValidadorLogin  @Inject constructor() : Validador<LoginUiState> {
     var validadorPassword =
         ValidadorCompuesto<String>()
             .add(ValidadorTextoNoVacio("El password no puede estar vacío"))
-            .add(ValidadorLongitudMinimaTexto(8, "El password debe tener como mínimo 8 carácteres"))
+            .add(ValidadorLongitudMinimaTexto(2, "El password debe tener como mínimo 8 carácteres"))
 
     override fun valida(datos: LoginUiState): ValidacionLoginUiState {
         val validacionLogin = validadorLogin.valida(datos.contacto)

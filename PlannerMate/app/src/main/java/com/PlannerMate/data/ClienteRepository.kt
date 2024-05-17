@@ -15,7 +15,7 @@ class ClienteRepository @Inject constructor(
         clienteService.get().map { it.toCliente() }
     }
 
-    suspend fun get(id: Int): Cliente = withContext(Dispatchers.IO) {
+    suspend fun getOne(id: Int): Cliente = withContext(Dispatchers.IO) {
         clienteService.getOne(id).toCliente()
     }
 

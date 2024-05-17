@@ -16,6 +16,6 @@ interface ClienteApiService {
 
     @GET("clientes/{id}")
     @Headers("Accept: application/json", "Content-Type: application/json")
-    suspend fun cliente() : Response<ClienteApi>
+    suspend fun cliente(@Path("id") id: Int) : Response<ClienteApi>
 
 }

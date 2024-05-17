@@ -1,7 +1,7 @@
 package com.PlannerMate.data
 
+import android.util.Log
 import com.PlannerMate.data.services.TrabajadorServiceImplementation
-import com.PlannerMate.models.Cliente
 import com.PlannerMate.models.Trabajador
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,7 +12,9 @@ class TrabajadorRepository @Inject constructor(
 ) {
 
     suspend fun get(): List<Trabajador> = withContext(Dispatchers.IO) {
-        trabajadorService.get().map { it.toTrabajador() }
+        val trabajadoresApi = trabajadorService.get()
+        val trabajadores = trabajadoresApi.map { it.toTrabajador() }
+        trabajadores
     }
 
     suspend fun get(id: Int): Trabajador = withContext(Dispatchers.IO) {

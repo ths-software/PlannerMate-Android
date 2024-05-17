@@ -5,3 +5,10 @@ data class Trabajador(
     val nombre : String,
     val contacto : String
 )
+{
+    constructor() : this (
+        idTrabajador = 0,
+        nombre = "",
+        contacto = ""
+    )
+}

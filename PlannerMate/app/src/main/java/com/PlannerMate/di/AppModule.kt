@@ -39,7 +39,7 @@ class AppModule {
         okHttpClient: OkHttpClient
     ) : Retrofit = Retrofit.Builder()
         .client(okHttpClient)
-        .baseUrl("http://10.0.2.2/agenda/")  // cambiar url
+        .baseUrl("http://plannermate.westeurope.cloudapp.azure.com:8080/PlannerAPIRest/datos/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
