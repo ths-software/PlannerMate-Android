@@ -37,7 +37,11 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.window.Dialog
 import com.PlannerMate.utilities.convertMillisToLocalDate
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -111,7 +115,7 @@ fun CitaScreen(
         // Cuadro de descripción
         OutlinedTextField(
             value = citaUiState.descripcion,
-            onValueChange = {onCitaEvent(CitaEvent.DescripcionChanged(it))},
+            onValueChange = { onCitaEvent(CitaEvent.DescripcionChanged(it)) },
             label = { Text("Descripción de la cita, ejemplo: tintar") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -146,7 +150,8 @@ fun CitaScreen(
                 trabajadores.forEach { trabajador ->
                     DropdownMenuItem(
                         text = { Text(text = trabajador.nombre) },
-                        onClick = { trabajadorSeleccionado = trabajador
+                        onClick = {
+                            trabajadorSeleccionado = trabajador
                         })
                 }
             }
@@ -168,16 +173,29 @@ fun CitaScreen(
             Spacer(modifier = Modifier.width(16.dp))
             Button(
                 onClick = {
+                    // Combina fecha y hora seleccionadas
                     val fechaHora = "$fechaSeleccionada $horaSeleccionada:00"
-                    val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
-                    val parsedDate = formatter.parse(fechaHora)
-                    val isoFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-                    isoFormatter.timeZone = TimeZone.getTimeZone("UTC")
-                    val fechaISO = isoFormatter.format(parsedDate)
+
+                    // Obtiene la zona horaria del dispositivo
+                    val deviceTimeZone = TimeZone.getDefault()
+
+                    // formateamos fecha y hora
+                    val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
+                    simpleDateFormat.timeZone = deviceTimeZone
+                    val localDate = simpleDateFormat.parse(fechaHora)
+
+                    // calculamos el ajuste de la hora en base al horario de verano/invierno
+                    val timeZoneOffset = deviceTimeZone.getOffset(localDate.time)
+
+                    // Convertir fecha y hora locales a UTC, teniendo en cuenta el ajuste de la hora
+                    val fechaUTC = Date(localDate.time + timeZoneOffset)
+
+                    // Formatear la fecha y hora en formato ISO 8601 para introducir a la base de datos
+                    val utcFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+                    utcFormatter.timeZone = TimeZone.getTimeZone("UTC")
+                    val fechaISO = utcFormatter.format(fechaUTC)
 
                     onCitaEvent(CitaEvent.FechaChanged(fechaISO))
-
-
                     onCitaEvent(CitaEvent.TrabajadorChanged(trabajadorSeleccionado))
                     onCitaEvent(CitaEvent.OnClickCitar(onNavigateToPerfil))
                 },
