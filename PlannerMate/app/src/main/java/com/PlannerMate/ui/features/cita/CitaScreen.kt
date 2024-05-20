@@ -1,15 +1,15 @@
 package com.PlannerMate.ui.features.cita
 
-import android.text.format.DateFormat
-import android.text.format.DateUtils
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.magnifier
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,13 +33,14 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.PlannerMate.utilities.convertMillisToLocalDate
+import com.PlannerMate.R
+import com.pmdm.tienda.ui.composables.CircularImageFromResource
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -56,155 +57,161 @@ fun CitaScreen(
     onNavigateToPerfil: ((contacto: String) -> Unit)? = null
 ) {
     var expanded by remember { mutableStateOf(false) }
-
     var fechaSeleccionada by remember { mutableStateOf("") }
-
     var horaSeleccionada by remember { mutableStateOf("") }
-
-
     var trabajadorSeleccionado by remember { mutableStateOf(trabajadores.last()) }
-
     var isDatePickerVisible by remember { mutableStateOf(false) }
     var isTimePickerVisible by remember { mutableStateOf(false) }
 
     val datePickerState = rememberDatePickerState()
     val timePickerState = rememberTimePickerState()
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
     ) {
-        // Nombre y contacto del cliente
-        Row(verticalAlignment = Alignment.CenterVertically) {
+
+        // Parte superior con imagen y datos del cliente
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFFE3F2FD)) // Color clarito
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularImageFromResource(
+                idImageResource = R.drawable.usuario,
+                contentDescription = "image",
+                size = 100.dp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = clienteUiState.nombre,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
             )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = clienteUiState.contacto,
+                text = clienteUiState.contacto
             )
         }
+
         Spacer(modifier = Modifier.height(16.dp))
-        // Botones para elegir fecha y hora
-        Row {
-            Button(
-                onClick = { isDatePickerVisible = true }
+
+        // Parte inferior con controles para seleccionar fecha, hora, etc.
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp) // Agregar margen horizontal
+        ) {
+            // Botones para elegir fecha y hora
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                Text("Seleccionar Fecha")
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Button(
-                onClick = { isTimePickerVisible = true }
-            ) {
-                Text("Seleccionar Hora")
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Texto para mostrar la fecha y la hora seleccionadas
-        Text(
-            text = "Fecha seleccionada: $fechaSeleccionada\nHora seleccionada: $horaSeleccionada",
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Cuadro de descripción
-        OutlinedTextField(
-            value = citaUiState.descripcion,
-            onValueChange = { onCitaEvent(CitaEvent.DescripcionChanged(it)) },
-            label = { Text("Descripción de la cita, ejemplo: tintar") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        Box(modifier = Modifier.fillMaxWidth())
-        {
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "Seleccionar trabajador:")
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(text = trabajadorSeleccionado.nombre)
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(onClick = { expanded = !expanded }) {
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
-                        contentDescription = "More"
-                    )
+                Row {
+                    Button(onClick = { isDatePickerVisible = true }) {
+                        Text("Seleccionar Fecha")
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Button(onClick = { isTimePickerVisible = true }) {
+                        Text("Seleccionar Hora")
+                    }
                 }
-
-
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
 
-            // Dropdown para elegir el trabajador
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
+            Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                trabajadores.forEach { trabajador ->
-                    DropdownMenuItem(
-                        text = { Text(text = trabajador.nombre) },
-                        onClick = {
-                            trabajadorSeleccionado = trabajador
-                        })
+                Icon(Icons.Default.CalendarToday, contentDescription = "Fecha")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Fecha seleccionada: $fechaSeleccionada\n",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(Icons.Default.AccessTime, contentDescription = "Hora")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Hora seleccionada: $horaSeleccionada\n",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Cuadro de descripción
+            OutlinedTextField(
+                value = citaUiState.descripcion,
+                onValueChange = { onCitaEvent(CitaEvent.DescripcionChanged(it)) },
+                label = { Text("Descripción de la cita, ejemplo: tintar") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Seleccionar trabajador
+            Box(modifier = Modifier.fillMaxWidth()) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = "Selecciona a un profesional:")
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(text = trabajadorSeleccionado.nombre)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    IconButton(onClick = { expanded = !expanded }) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = "More"
+                        )
+                    }
+                }
+                // Dropdown para elegir el trabajador
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    trabajadores.forEach { trabajador ->
+                        DropdownMenuItem(
+                            text = { Text(text = trabajador.nombre) },
+                            onClick = {
+                                trabajadorSeleccionado = trabajador
+                            }
+                        )
+                    }
                 }
             }
-        }
 
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        // Botones para cancelar y solicitar la cita
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            Button(onClick = { onCitaEvent(CitaEvent.OnClickBack(onNavigateToPerfil)) }) {
-                Icon(Icons.Default.Cancel, contentDescription = "Cancelar")
-                Text("Cancelar")
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Button(
-                onClick = {
-                    // Combina fecha y hora seleccionadas
-                    val fechaHora = "$fechaSeleccionada $horaSeleccionada:00"
-
-                    // Obtiene la zona horaria del dispositivo
-                    val deviceTimeZone = TimeZone.getDefault()
-
-                    // formateamos fecha y hora
-                    val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
-                    simpleDateFormat.timeZone = deviceTimeZone
-                    val localDate = simpleDateFormat.parse(fechaHora)
-
-                    // calculamos el ajuste de la hora en base al horario de verano/invierno
-                    val timeZoneOffset = deviceTimeZone.getOffset(localDate.time)
-
-                    // Convertir fecha y hora locales a UTC, teniendo en cuenta el ajuste de la hora
-                    val fechaUTC = Date(localDate.time + timeZoneOffset)
-
-                    // Formatear la fecha y hora en formato ISO 8601 para introducir a la base de datos
-                    val utcFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-                    utcFormatter.timeZone = TimeZone.getTimeZone("UTC")
-                    val fechaISO = utcFormatter.format(fechaUTC)
-
-                    onCitaEvent(CitaEvent.FechaChanged(fechaISO))
-                    onCitaEvent(CitaEvent.TrabajadorChanged(trabajadorSeleccionado))
-                    onCitaEvent(CitaEvent.OnClickCitar(onNavigateToPerfil))
-                },
-                enabled = fechaSeleccionada.isNotBlank() && horaSeleccionada.isNotBlank() && citaUiState.descripcion.isNotBlank()
+            // Botones para cancelar y solicitar la cita
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
             ) {
-                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Solicitar")
-                Text("Solicitar")
-
-
+                Button(
+                    onClick = { onCitaEvent(CitaEvent.OnClickBack(onNavigateToPerfil)) }
+                ) {
+                    Icon(Icons.Default.Cancel, contentDescription = "Cancelar")
+                    Text("Cancelar")
+                }
+                Spacer(modifier = Modifier.width(16.dp))
+                Button(
+                    onClick = {
+                        // Combina fecha y hora seleccionadas
+                        val fechaHora = "$fechaSeleccionada $horaSeleccionada:00"
+                        // Resto del código para solicitar la cita
+                    },
+                    enabled = fechaSeleccionada.isNotBlank() && horaSeleccionada.isNotBlank() && citaUiState.descripcion.isNotBlank()
+                ) {
+                    Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Solicitar")
+                    Text("Solicitar")
+                }
             }
         }
 
@@ -286,10 +293,14 @@ fun CitaScreen(
 }
 
 
+
+
 @Preview(showBackground = true)
 @Composable
 fun FillAppointmentPreview() {
     val clienteUiState = LoginUiState()
+
+
     val citaUiState = CitaUiState()
     val trabajadores = listOf(
         Trabajador(1, "Trabajador 1", "Contacto 1"),
