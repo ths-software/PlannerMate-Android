@@ -71,7 +71,7 @@ fun CitaScreen(
             .fillMaxSize()
     ) {
 
-        // Parte superior con imagen y datos del cliente
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -97,13 +97,13 @@ fun CitaScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Parte inferior con controles para seleccionar fecha, hora, etc.
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp) // Agregar margen horizontal
+                .padding(horizontal = 16.dp)
         ) {
-            // Botones para elegir fecha y hora
+
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -146,7 +146,7 @@ fun CitaScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Cuadro de descripción
+
             OutlinedTextField(
                 value = citaUiState.descripcion,
                 onValueChange = { onCitaEvent(CitaEvent.DescripcionChanged(it)) },
@@ -156,7 +156,7 @@ fun CitaScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Seleccionar trabajador
+
             Box(modifier = Modifier.fillMaxWidth()) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = "Selecciona a un profesional:")
@@ -170,7 +170,7 @@ fun CitaScreen(
                         )
                     }
                 }
-                // Dropdown para elegir el trabajador
+
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
@@ -189,7 +189,7 @@ fun CitaScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botones para cancelar y solicitar la cita
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
@@ -205,7 +205,31 @@ fun CitaScreen(
                     onClick = {
                         // Combina fecha y hora seleccionadas
                         val fechaHora = "$fechaSeleccionada $horaSeleccionada:00"
-                        // Resto del código para solicitar la cita
+
+                        // Obtiene la zona horaria del dispositivo
+                        val deviceTimeZone = TimeZone.getDefault()
+
+                        // formateamos fecha y hora
+                        val simpleDateFormat =
+                            SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault())
+                        simpleDateFormat.timeZone = deviceTimeZone
+                        val localDate = simpleDateFormat.parse(fechaHora)
+
+                        // calculamos el ajuste de la hora en base al horario de verano/invierno
+                        val timeZoneOffset = deviceTimeZone.getOffset(localDate.time)
+
+                        // Convertir fecha y hora locales a UTC, teniendo en cuenta el ajuste de la hora
+                        val fechaUTC = Date(localDate.time + timeZoneOffset)
+
+                        // Formatear la fecha y hora en formato ISO 8601 para introducir a la base de datos
+                        val utcFormatter =
+                            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+                        utcFormatter.timeZone = TimeZone.getTimeZone("UTC")
+                        val fechaISO = utcFormatter.format(fechaUTC)
+
+                        onCitaEvent(CitaEvent.FechaChanged(fechaISO))
+                        onCitaEvent(CitaEvent.TrabajadorChanged(trabajadorSeleccionado))
+                        onCitaEvent(CitaEvent.OnClickCitar(onNavigateToPerfil))
                     },
                     enabled = fechaSeleccionada.isNotBlank() && horaSeleccionada.isNotBlank() && citaUiState.descripcion.isNotBlank()
                 ) {

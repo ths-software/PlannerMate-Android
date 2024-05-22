@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Web
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -95,6 +98,8 @@ fun ProfileScreen(
                     Log.d("_CITA", "$ex")
                 }
 
+                Text(text = "Cita actual:")
+
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -102,6 +107,7 @@ fun ProfileScreen(
                     shape = RoundedCornerShape(8.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
+
                     Row(
                         modifier = Modifier
                             .padding(8.dp)
@@ -110,8 +116,8 @@ fun ProfileScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column {
-                            Text(text = "Cita actual:")
-                            Text(text = " ${citaActual?.descripcion} $fechaFormateada")
+
+                            Text(text = "${citaActual?.descripcion} $fechaFormateada")
                             Text(text = "con ${citaActual?.trabajador?.nombre}")
                         }
                         IconButton(onClick = { onCitaEvent(CitaEvent.OnEliminarCita) }) {
@@ -136,7 +142,39 @@ fun ProfileScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(50.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
+            ) {
+                Icon(Icons.Default.Phone, contentDescription = "Teléfono")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Teléfono: 614999999")
+            }
+
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
+            ) {
+                Icon(Icons.Default.Email, contentDescription = "Email")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Email: peluquería@hotmail.tk")
+            }
+
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth().padding(16.dp)
+            ) {
+                Icon(Icons.Default.Web, contentDescription = "Página web")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Página web: www.LaMejorWeb.com/home")
+            }
+            Spacer(modifier = Modifier.height(50.dp))
+
+
 
             // Botón para cerrar sesión y opciones
             TextButton(
