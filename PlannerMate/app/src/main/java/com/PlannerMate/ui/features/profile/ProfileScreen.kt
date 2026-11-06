@@ -21,25 +21,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.PlannerMate.R
 
-import com.PlannerMate.models.Cita
-import com.PlannerMate.models.Cliente
-import com.PlannerMate.models.Trabajador
-import com.PlannerMate.ui.features.cita.CitaEvent
-import com.PlannerMate.ui.features.cita.CitaUiState
+import com.PlannerMate.models.Appointment
+import com.PlannerMate.models.Client
+import com.PlannerMate.models.Employee
+import com.PlannerMate.ui.features.appointment.AppointmentEvent
+import com.PlannerMate.ui.features.appointment.AppointmentUiState
 import com.PlannerMate.ui.features.login.LoginUiState
-import com.pmdm.tienda.ui.composables.CircularImageFromResource
+import com.PlannerMate.ui.composables.CircularImageFromResource
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @Composable
 fun ProfileScreen(
-    clienteUiState: LoginUiState,
-    citaActual: CitaUiState?,
+    clientUiState: LoginUiState,
+    appointmentActual: AppointmentUiState?,
     onLogout: () -> Unit,
-    onCitaEvent: (CitaEvent) -> Unit,
-    onAgregarCita: () -> Unit,
-    onOpciones: () -> Unit
+    onAppointmentEvent: (AppointmentEvent) -> Unit,
+    onAgregarAppointment: () -> Unit,
+    onOptions: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -55,19 +55,19 @@ fun ProfileScreen(
         ) {
 
             CircularImageFromResource(
-                idImageResource = R.drawable.usuario,
-                contentDescription = "image",
+                idImageResource = R.drawable.user,
+                contentDescriptionription = "image",
                 size = 100.dp
             )
 
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = clienteUiState.nombre,
+                text = clientUiState.name,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )
             Text(
-                text = clienteUiState.contacto,
+                text = clientUiState.contact,
                 fontSize = 16.sp
             )
         }
@@ -81,19 +81,19 @@ fun ProfileScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             // Si hay una cita actual, la mostramos con el botón para eliminar
-            if (!citaActual?.fecha.equals("")) {
-                var fechaFormateada = ""
+            if (!appointmentActual?.date.equals("")) {
+                var dateFormateada = ""
                 try {
-                    val fechaSinUTC = citaActual?.fecha?.replace("\\[UTC\\]$".toRegex(), "")
-                    Log.d("_CITA", "Fecha sin [UTC]: $fechaSinUTC")
+                    val dateSinUTC = appointmentActual?.date?.replace("\\[UTC\\]$".toRegex(), "")
+                    Log.d("_CITA", "Fecha sin [UTC]: $dateSinUTC")
 
                     val formatter =
                         DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX", Locale.ENGLISH)
-                    val fecha = LocalDateTime.parse(fechaSinUTC, formatter)
+                    val date = LocalDateTime.parse(dateSinUTC, formatter)
 
                     val formatterSalida =
                         DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.ENGLISH)
-                    fechaFormateada = formatterSalida.format(fecha)
+                    dateFormateada = formatterSalida.format(date)
                 } catch (ex: Exception) {
                     Log.d("_CITA", "$ex")
                 }
@@ -117,13 +117,13 @@ fun ProfileScreen(
                     ) {
                         Column {
 
-                            Text(text = "${citaActual?.descripcion} $fechaFormateada")
-                            Text(text = "con ${citaActual?.trabajador?.nombre}")
+                            Text(text = "${appointmentActual?.description} $dateFormateada")
+                            Text(text = "con ${appointmentActual?.employee?.name}")
                         }
-                        IconButton(onClick = { onCitaEvent(CitaEvent.OnEliminarCita) }) {
+                        IconButton(onClick = { onAppointmentEvent(AppointmentEvent.OnDeleteAppointment) }) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete Icon"
+                                contentDescriptionription = "Delete Icon"
                             )
                         }
                     }
@@ -136,7 +136,7 @@ fun ProfileScreen(
                 ) {
                     Text("Sin citas solicitadas")
                     Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = { onAgregarCita() }) {
+                    Button(onClick = { onAgregarAppointment() }) {
                         Text("Agregar Cita")
                     }
                 }
@@ -148,7 +148,7 @@ fun ProfileScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             ) {
-                Icon(Icons.Default.Phone, contentDescription = "Teléfono")
+                Icon(Icons.Default.Phone, contentDescriptionription = "Teléfono")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Teléfono: 614999999")
             }
@@ -158,7 +158,7 @@ fun ProfileScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             ) {
-                Icon(Icons.Default.Email, contentDescription = "Email")
+                Icon(Icons.Default.Email, contentDescriptionription = "Email")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Email: peluquería@hotmail.tk")
             }
@@ -168,7 +168,7 @@ fun ProfileScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             ) {
-                Icon(Icons.Default.Web, contentDescription = "Página web")
+                Icon(Icons.Default.Web, contentDescriptionription = "Página web")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Página web: www.LaMejorWeb.com/home")
             }
@@ -178,7 +178,7 @@ fun ProfileScreen(
 
             // Botón para cerrar sesión y opciones
             TextButton(
-                onClick = { onOpciones() },
+                onClick = { onOptions() },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Opciones", color = MaterialTheme.colorScheme.primary)
@@ -197,23 +197,23 @@ fun ProfileScreen(
 @Preview(showBackground = true)
 @Composable
 fun ProfilePreview() {
-    val clienteUiState = LoginUiState()
-    val trabajador = Trabajador(0, "nombreTrabajador", "contactTrabajador")
-    val cliente = Cliente(
-        clienteUiState.idCliente,
-        clienteUiState.nombre,
-        clienteUiState.contacto,
-        clienteUiState.password
+    val clientUiState = LoginUiState()
+    val employee = Employee(0, "nombreTrabajador", "contactTrabajador")
+    val client = Client(
+        clientUiState.clientId,
+        clientUiState.name,
+        clientUiState.contact,
+        clientUiState.password
     )
 
-    val citaActual = Cita(0, nombre = "", "", fecha = "", descripcion = "", trabajador, cliente)
+    val appointmentActual = Appointment(0, name = "", "", date = "", description = "", employee, client)
 
     ProfileScreen(
-        clienteUiState = clienteUiState,
-        citaActual = null,
+        clientUiState = clientUiState,
+        appointmentActual = null,
         onLogout = {},
-        onCitaEvent = {},
-        onAgregarCita = {},
-        onOpciones = {}
+        onAppointmentEvent = {},
+        onAgregarAppointment = {},
+        onOptions = {}
     )
 }

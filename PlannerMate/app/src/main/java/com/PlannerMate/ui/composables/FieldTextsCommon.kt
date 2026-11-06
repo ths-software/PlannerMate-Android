@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.composables
+package com.PlannerMate.ui.composables
 
 import android.telephony.PhoneNumberUtils
 import androidx.compose.foundation.text.KeyboardActions
@@ -23,41 +23,41 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import com.pmdm.tienda.utilities.validacion.Validacion
+import com.PlannerMate.utilities.validation.Validation
 
 
 @Composable
 fun TextFieldWithErrorState(
     modifier: Modifier = Modifier,
     label: String,
-    textoState: String,
-    textoPista: String = "",
+    textState: String,
+    textPista: String = "",
     leadingIcon: @Composable (() -> Unit)? = null,
-    validacionState: Validacion,
+    validationState: Validation,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
     keyboardActions: KeyboardActions = KeyboardActions(),
     onValueChange: (String) -> Unit
 ) {
     TextField(
         modifier = modifier,
-        value = textoState,
+        value = textState,
         onValueChange = onValueChange,
         singleLine = true,
         leadingIcon = leadingIcon,
         placeholder = {
             Text(
-                text = textoPista,
+                text = textPista,
                 style = TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
             )
         },
-        label = { Text(if (validacionState.hayError) "${label}*" else label) },
+        label = { Text(if (validationState.hasError) "${label}*" else label) },
         keyboardOptions = keyboardOptions,
         supportingText = {
-            if (validacionState.hayError) {
-                Text(text = validacionState.mensajeError!!)
+            if (validationState.hasError) {
+                Text(text = validationState.errorMessage!!)
             }
         },
-        isError = validacionState.hayError,
+        isError = validationState.hasError,
         keyboardActions = keyboardActions
     )
 }
@@ -66,36 +66,36 @@ fun TextFieldWithErrorState(
 fun OutlinedTextFieldWithErrorState(
     modifier: Modifier = Modifier,
     label: String,
-    textoState: String,
+    textState: String,
     enabled:Boolean=true,
-    textoPista: String = "",
+    textPista: String = "",
     leadingIcon: @Composable (() -> Unit)? = null,
-    validacionState: Validacion,
+    validationState: Validation,
     keyboardOptions: KeyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
     keyboardActions: KeyboardActions = KeyboardActions(),
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(
         modifier = modifier,
-        value = textoState,
+        value = textState,
         enabled=enabled,
         onValueChange = onValueChange,
         singleLine = true,
         leadingIcon = leadingIcon,
         placeholder = {
             Text(
-                text = textoPista,
+                text = textPista,
                 style = TextStyle(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
             )
         },
-        label = { Text(if (validacionState.hayError) "${label}*" else label) },
+        label = { Text(if (validationState.hasError) "${label}*" else label) },
         keyboardOptions = keyboardOptions,
         supportingText = {
-            if (validacionState.hayError) {
-                Text(text = validacionState.mensajeError!!)
+            if (validationState.hasError) {
+                Text(text = validationState.errorMessage!!)
             }
         },
-        isError = validacionState.hayError,
+        isError = validationState.hasError,
         keyboardActions = keyboardActions
     )
 }
@@ -104,7 +104,7 @@ fun OutlinedTextFieldWithErrorState(
 fun TextFieldPassword(
     modifier: Modifier = Modifier,
     passwordState: String,
-    validacionState: Validacion,
+    validationState: Validation,
     onValueChange: (String) -> Unit,
     label: String = "Clave",
     labelShow: String = "Muestra clave",
@@ -117,28 +117,28 @@ fun TextFieldPassword(
         value = passwordState,
         onValueChange = onValueChange,
         singleLine = true,
-        label = { Text(if (validacionState.hayError) "${label}*" else label) },
+        label = { Text(if (validationState.hasError) "${label}*" else label) },
         supportingText = {
-            if (validacionState.hayError) {
-                Text(text = validacionState.mensajeError!!)
+            if (validationState.hasError) {
+                Text(text = validationState.errorMessage!!)
             }
         },
-        isError = validacionState.hayError,
+        isError = validationState.hasError,
         visualTransformation =
         if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         leadingIcon = {
             Icon(
                 painter = iconoInformativo,
-                contentDescription = label
+                contentDescriptionription = label
             )
         },
         trailingIcon = {
             IconButton(onClick = { passwordHidden = !passwordHidden }) {
                 val visibilityIcon =
                     if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                val description = if (passwordHidden) labelShow else labelHide
-                Icon(imageVector = visibilityIcon, contentDescription = description)
+                val descriptionription = if (passwordHidden) labelShow else labelHide
+                Icon(imageVector = visibilityIcon, contentDescriptionription = descriptionription)
             }
         }
     )
@@ -148,7 +148,7 @@ fun TextFieldPassword(
 fun OutlinedTextFieldPassword(
     modifier: Modifier = Modifier,
     passwordState: String,
-    validacionState: Validacion,
+    validationState: Validation,
     onValueChange: (String) -> Unit,
     label: String = "Clave",
     labelShow: String = "Muestra clave",
@@ -161,28 +161,28 @@ fun OutlinedTextFieldPassword(
         value = passwordState,
         onValueChange = onValueChange,
         singleLine = true,
-        label = { Text(if (validacionState.hayError) "${label}*" else label) },
+        label = { Text(if (validationState.hasError) "${label}*" else label) },
         supportingText = {
-            if (validacionState.hayError) {
-                Text(text = validacionState.mensajeError!!)
+            if (validationState.hasError) {
+                Text(text = validationState.errorMessage!!)
             }
         },
-        isError = validacionState.hayError,
+        isError = validationState.hasError,
         visualTransformation =
         if (passwordHidden) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         leadingIcon = {
             Icon(
                 painter = iconoInformativo,
-                contentDescription = label
+                contentDescriptionription = label
             )
         },
         trailingIcon = {
             IconButton(onClick = { passwordHidden = !passwordHidden }) {
                 val visibilityIcon =
                     if (passwordHidden) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                val description = if (passwordHidden) labelShow else labelHide
-                Icon(imageVector = visibilityIcon, contentDescription = description)
+                val descriptionription = if (passwordHidden) labelShow else labelHide
+                Icon(imageVector = visibilityIcon, contentDescriptionription = descriptionription)
             }
         }
     )
@@ -192,26 +192,26 @@ fun OutlinedTextFieldPassword(
 fun TextFieldPhone(
     modifier: Modifier = Modifier,
     label: String = "Teléfono",
-    telefonoState: String,
-    validacionState: Validacion,
+    phoneState: String,
+    validationState: Validation,
     onValueChange: (String) -> Unit
 ) {
     TextFieldWithErrorState(
         modifier = modifier,
         label = label,
-        textoState = telefonoState,
-        textoPista = "999 99 99 99",
+        textState = phoneState,
+        textPista = "999 99 99 99",
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Phone,
-                contentDescription = "Teléfono"
+                contentDescriptionription = "Teléfono"
             )
         },
-        validacionState = validacionState,
+        validationState = validationState,
         onValueChange = {
             var text = it
-            if (!validacionState.hayError) {
+            if (!validationState.hasError) {
                 try {
                     text = PhoneNumberUtils.formatNumber(it, "ES")
                 } catch (e: Exception) {
@@ -227,26 +227,26 @@ fun TextFieldPhone(
 fun OutlinedTextFieldPhone(
     modifier: Modifier = Modifier,
     label: String = "Teléfono",
-    telefonoState: String,
-    validacionState: Validacion,
+    phoneState: String,
+    validationState: Validation,
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextFieldWithErrorState(
         modifier = modifier,
         label = label,
-        textoState = telefonoState,
-        textoPista = "999999999",
+        textState = phoneState,
+        textPista = "999999999",
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Phone,
-                contentDescription = "Teléfono"
+                contentDescriptionription = "Teléfono"
             )
         },
-        validacionState = validacionState,
+        validationState = validationState,
         onValueChange = {
             var text = it
-            if (!validacionState.hayError) {
+            if (!validationState.hasError) {
                 try {
                     text = PhoneNumberUtils.formatNumber(it, "ES")
                 } catch (e: Exception) {
@@ -264,23 +264,23 @@ fun TextFieldEmail(
     label: String = "Email",
     enabled: Boolean=true,
     emailState: String,
-    validacionState: Validacion,
+    validationState: Validation,
     onValueChange: (String) -> Unit
 ) {
 
     TextFieldWithErrorState(
         modifier = modifier,
         label = label,
-        textoState = emailState,
-        textoPista = "ejemplo@correo.com",
+        textState = emailState,
+        textPista = "ejemplo@correo.com",
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Email,
-                contentDescription = "Email"
+                contentDescriptionription = "Email"
             )
         },
-        validacionState = validacionState,
+        validationState = validationState,
         onValueChange = { onValueChange(it) }
     )
 }
@@ -291,23 +291,23 @@ fun OutlinedTextFieldEmail(
     enabled: Boolean=true,
     label: String = "Email",
     emailState: String,
-    validacionState: Validacion,
+    validationState: Validation,
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextFieldWithErrorState(
         modifier = modifier,
         label = label,
         enabled=enabled,
-        textoState = emailState,
-        textoPista = "ejemplo@correo.com",
+        textState = emailState,
+        textPista = "ejemplo@correo.com",
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Email,
-                contentDescription = "Email"
+                contentDescriptionription = "Email"
             )
         },
-        validacionState = validacionState,
+        validationState = validationState,
         onValueChange = onValueChange
     )
 }

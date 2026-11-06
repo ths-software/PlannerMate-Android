@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.composables
+package com.PlannerMate.ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -42,27 +42,27 @@ fun TextNewAccount(onClick: () -> Unit, color: Color = MaterialTheme.colorScheme
 
 
 @Composable
-fun TextWithLine(texto: String, color: Color) {
+fun TextWithLine(text: String, color: Color) {
     /* val activity = (LocalContext.current as Activity)
      val metrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(activity)
      var tamañoLinea =
          Math.round(metrics.bounds.width() - (activity.resources.displayMetrics.density * texto.length)*10)/10
 
     */
-    val tamañoLinea=53
+    val lineSize=53
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             Modifier
-                .size(tamañoLinea.dp, 1.dp)
+                .size(lineSize.dp, 1.dp)
                 .fillMaxWidth()
                 .background(color)
         )
-        Text(" $texto ", color = color)
+        Text(" $text ", color = color)
         Box(
             Modifier
-                .size(tamañoLinea.dp, 1.dp)
+                .size(lineSize.dp, 1.dp)
                 .fillMaxWidth()
                 .background(color)
         )
@@ -74,7 +74,7 @@ fun TextWithLine(texto: String, color: Color) {
 fun TextNewAccountTest() {
     Column() {
         TextNewAccount(onClick = {})
-        TextWithLine(texto = "Dirección", color = Color.Magenta)
+        TextWithLine(text = "Dirección", color = Color.Magenta)
 
     }
 }

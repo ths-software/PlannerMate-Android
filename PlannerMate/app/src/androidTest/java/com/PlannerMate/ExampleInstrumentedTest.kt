@@ -1,4 +1,4 @@
-package com.primer_proyecto_con_plantilla
+package com.primer_project_con_plantilla
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

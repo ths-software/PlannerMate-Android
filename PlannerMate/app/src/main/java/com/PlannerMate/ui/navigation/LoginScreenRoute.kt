@@ -18,18 +18,18 @@ fun NavController.navigateToLogin(
 
 fun NavGraphBuilder.loginScreenRoute(
     loginViewModel: LoginViewModel,
-    onNavigateToPerfil: (contacto: String) -> Unit
+    onNavigateToProfile: (contact: String) -> Unit
 ) {
 
     composable(route = HomeRoute){ backStackEntry ->
 
         LoginScreen(
-            clienteUiState = loginViewModel.clienteUiState,
-            validacionLoginUiState = loginViewModel.validacionUiState,
-            mostrarSnackbarHostState = loginViewModel.mostrarSnackBar,
+            clientUiState = loginViewModel.clientUiState,
+            validationLoginUiState = loginViewModel.validationUiState,
+            showSnackbarHostState = loginViewModel.showSnackbar,
             onLoginEvent = loginViewModel::onLoginEvent,
-            onNavigateToPerfil = onNavigateToPerfil,
-            onMostrarSnackBar = loginViewModel.onMostrarSnackBar)
+            onNavigateToProfile = onNavigateToProfile,
+            onShowSnackbar = loginViewModel.onShowSnackbar)
     }
 
 }

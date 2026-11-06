@@ -15,7 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.PlannerMate.ui.features.login.LoginScreen
 import com.PlannerMate.ui.features.login.LoginViewModel
 import com.PlannerMate.ui.navigation.NavHostBase
-import com.PlannerMate.ui.theme.ProyectoBaseTheme
+import com.PlannerMate.ui.theme.ProjectBaseTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val loginViewModel: LoginViewModel = hiltViewModel()
 
-            ProyectoBaseTheme {
+            ProjectBaseTheme {
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),

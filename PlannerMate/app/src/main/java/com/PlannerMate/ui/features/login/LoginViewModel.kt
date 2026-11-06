@@ -6,11 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.PlannerMate.data.ClienteRepository
-import com.PlannerMate.data.TrabajadorRepository
+import com.PlannerMate.data.ClientRepository
+import com.PlannerMate.data.EmployeeRepository
 import com.PlannerMate.data.services.ApiServicesException
-import com.PlannerMate.models.Cliente
-import com.PlannerMate.models.Trabajador
+import com.PlannerMate.models.Client
+import com.PlannerMate.models.Employee
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -18,40 +18,40 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val clienteRepository: ClienteRepository, private val validadorLogin: ValidadorLogin,
-    private val trabajadoresRepository: TrabajadorRepository
+    private val clientRepository: ClientRepository, private val validatorLogin: LoginValidator,
+    private val employeesRepository: EmployeeRepository
 ) : ViewModel() {
 
-    var clienteUiState by mutableStateOf(LoginUiState())
+    var clientUiState by mutableStateOf(LoginUiState())
         private set
-    var validacionUiState by mutableStateOf(ValidacionLoginUiState())
+    var validationUiState by mutableStateOf(LoginValidationUiState())
         private set
 
 
-    var mostrarSnackBar by mutableStateOf(false)
-    val onMostrarSnackBar: () -> Unit by mutableStateOf({
-        mostrarSnackBar = !mostrarSnackBar
+    var showSnackbar by mutableStateOf(false)
+    val onShowSnackbar: () -> Unit by mutableStateOf({
+        showSnackbar = !showSnackbar
     })
 
-    var trabajadores by mutableStateOf(mutableListOf<Trabajador>())
+    var employees by mutableStateOf(mutableListOf<Employee>())
 
-    var clientes by mutableStateOf(mutableListOf<Cliente>())
+    var clients by mutableStateOf(mutableListOf<Client>())
 
     fun onLoginEvent(loginEvent: LoginEvent) {
         when (loginEvent) {
             is LoginEvent.LoginChanged -> {
-                clienteUiState = clienteUiState.copy(contacto = loginEvent.contacto)
+                clientUiState = clientUiState.copy(contact = loginEvent.contact)
 
                 viewModelScope.launch {
-                    clientes = clienteRepository.get().toMutableList()
+                    clients = clientRepository.get().toMutableList()
 
-                    val usuario = clienteUiState.toCliente()
+                    val user = clientUiState.toClient()
                     try {
-                        clientes.forEach {
-                            if (usuario.contacto == it.contacto) {
-                                clienteUiState = clienteUiState.copy(
-                                    idCliente = it.idCliente,
-                                    nombre = it.nombre
+                        clients.forEach {
+                            if (user.contact == it.contact) {
+                                clientUiState = clientUiState.copy(
+                                    clientId = it.clientId,
+                                    name = it.name
                                 )
                             }
                         }
@@ -61,32 +61,32 @@ class LoginViewModel @Inject constructor(
                 }
 
 
-                validacionUiState =
-                    validacionUiState.copy(validadorLogin.validadorLogin.valida(loginEvent.contacto)) // check conditions
+                validationUiState =
+                    validationUiState.copy(validatorLogin.validatorLogin.validate(loginEvent.contact)) // check conditions
             }
 
 
             is LoginEvent.PasswordChanged -> {
-                clienteUiState = clienteUiState.copy(password = loginEvent.password)
+                clientUiState = clientUiState.copy(password = loginEvent.password)
 
-                validacionUiState = validacionUiState.copy(
-                    validacionPassword = validadorLogin.validadorPassword.valida(loginEvent.password)
+                validationUiState = validationUiState.copy(
+                    validationPassword = validatorLogin.validatorPassword.validate(loginEvent.password)
                 )
             }
 
-            is LoginEvent.OnClickLogearse -> {
+            is LoginEvent.OnClickLogin -> {
 
                 viewModelScope.launch {
-                    validacionUiState = validadorLogin.valida(clienteUiState)
-                    if (!validacionUiState.hayError) {
+                    validationUiState = validatorLogin.validate(clientUiState)
+                    if (!validationUiState.hasError) {
 
-                        clienteUiState = clienteUiState.copy(
-                            estaLogeado = logearse()
+                        clientUiState = clientUiState.copy(
+                            isLoggedIn = logIn()
                         )
-                        if (clienteUiState.estaLogeado) {
+                        if (clientUiState.isLoggedIn) {
                             delay(3000)
 
-                            loginEvent.onNavigatePerfil?.let { it(clienteUiState.contacto) }
+                            loginEvent.onNavigateProfile?.let { it(clientUiState.contact) }
 
                         } else {
                             Log.d("Resultado", "no logueó!")
@@ -102,14 +102,14 @@ class LoginViewModel @Inject constructor(
 
     }
 
-    suspend fun logearse(): Boolean {
-        val usuario = clienteUiState.toCliente()
+    suspend fun logIn(): Boolean {
+        val user = clientUiState.toClient()
         try {
-            clientes.forEach {
-                if (usuario.contacto == it.contacto && usuario.password == it.password) {
-                    clienteUiState = clienteUiState.copy(nombre = it.nombre, idCliente = it.idCliente)
+            clients.forEach {
+                if (user.contact == it.contact && user.password == it.password) {
+                    clientUiState = clientUiState.copy(name = it.name, clientId = it.clientId)
 
-                    trabajadores = trabajadoresRepository.get().toMutableList()
+                    employees = employeesRepository.get().toMutableList()
 
                     return true
                 }
@@ -121,7 +121,7 @@ class LoginViewModel @Inject constructor(
     }
 
 
-    fun LoginUiState.toCliente() =
-        Cliente(this.idCliente, this.nombre, this.contacto, this.password)
+    fun LoginUiState.toClient() =
+        Client(this.clientId, this.name, this.contact, this.password)
 
 }

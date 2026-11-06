@@ -1,8 +1,8 @@
 package com.PlannerMate.di
 
-import com.PlannerMate.data.services.CitaApiService
-import com.PlannerMate.data.services.ClienteApiService
-import com.PlannerMate.data.services.TrabajadorApiService
+import com.PlannerMate.data.services.AppointmentApiService
+import com.PlannerMate.data.services.ClientApiService
+import com.PlannerMate.data.services.EmployeeApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,26 +39,26 @@ class AppModule {
         okHttpClient: OkHttpClient
     ) : Retrofit = Retrofit.Builder()
         .client(okHttpClient)
-        .baseUrl("http://plannermate.westeurope.cloudapp.azure.com:8080/PlannerAPIRest/datos/")
+        .baseUrl("http://localhost:8080/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
     @Provides
     @Singleton
-    fun provideCitasService(
+    fun provideAppointmentsService(
         retrofit: Retrofit
-    ) : CitaApiService = retrofit.create(CitaApiService::class.java)
+    ) : AppointmentApiService = retrofit.create(AppointmentApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideClientesService(
+    fun provideClientsService(
         retrofit: Retrofit
-    ) : ClienteApiService = retrofit.create(ClienteApiService::class.java)
+    ) : ClientApiService = retrofit.create(ClientApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideTrabajadoresService(
+    fun provideEmployeesService(
         retrofit: Retrofit
-    ) : TrabajadorApiService = retrofit.create(TrabajadorApiService::class.java)
+    ) : EmployeeApiService = retrofit.create(EmployeeApiService::class.java)
 
 }

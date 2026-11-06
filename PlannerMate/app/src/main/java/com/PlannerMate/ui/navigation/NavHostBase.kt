@@ -6,18 +6,18 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.PlannerMate.models.toCliente
-import com.PlannerMate.ui.features.cita.CitaViewModel
+import com.PlannerMate.models.toClient
+import com.PlannerMate.ui.features.appointment.AppointmentViewModel
 import com.PlannerMate.ui.features.login.LoginViewModel
-import com.PlannerMate.ui.features.profile.OpcionesViewModel
+import com.PlannerMate.ui.features.profile.OptionsViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavHostBase() {
     val navController = rememberNavController()
     val loginViewModel: LoginViewModel = hiltViewModel()
-    val citaViewModel: CitaViewModel = hiltViewModel()
-    val opcionesVM: OpcionesViewModel = hiltViewModel()
+    val appointmentViewModel: AppointmentViewModel = hiltViewModel()
+    val optionsVM: OptionsViewModel = hiltViewModel()
 
     NavHost(
         navController = navController,
@@ -26,37 +26,37 @@ fun NavHostBase() {
     {
         loginScreenRoute(
             loginViewModel,
-            onNavigateToPerfil = {
+            onNavigateToProfile = {
                 // podríamos cargar elementos relacionados
-                navController.navigateToPerfil()
-                citaViewModel.obtenerCitaDeCliente(loginViewModel.clienteUiState.idCliente)
+                navController.navigateToProfile()
+                appointmentViewModel.getClientAppointment(loginViewModel.clientUiState.clientId)
             }
         )
 
-        perfilScreenRoute(
+        profileScreenRoute(
             loginViewModel,
-            citaViewModel,
-            onAgregarCita = {
-                navController.navigateToCitas()
-                citaViewModel.asignarCliente(loginViewModel.clienteUiState.toCliente())
+            appointmentViewModel,
+            onAgregarAppointment = {
+                navController.navigateToAppointments()
+                appointmentViewModel.assignClient(loginViewModel.clientUiState.toClient())
             },
             onLogout = {
                 navController.navigateToLogin()
             },
-            onOpciones = { navController.navigateToOpciones() }
+            onOptions = { navController.navigateToOptions() }
         )
 
-        citasScreenRoute(
+        appointmentsScreenRoute(
             loginViewModel,
-            citaViewModel,
-            onNavigateToPerfil = {
-                citaViewModel.obtenerCitaDeCliente(loginViewModel.clienteUiState.idCliente)
-                navController.navigateToPerfil()
+            appointmentViewModel,
+            onNavigateToProfile = {
+                appointmentViewModel.getClientAppointment(loginViewModel.clientUiState.clientId)
+                navController.navigateToProfile()
             })
 
-        opcionesScreenRoute(
-            clienteUiState = loginViewModel.clienteUiState,
-            onNavigateToPerfil = { navController.navigateToPerfil() }
+        optionsScreenRoute(
+            clientUiState = loginViewModel.clientUiState,
+            onNavigateToProfile = { navController.navigateToProfile() }
         )
 
     }

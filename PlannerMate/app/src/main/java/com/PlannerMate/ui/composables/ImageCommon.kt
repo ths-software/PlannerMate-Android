@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.composables
+package com.PlannerMate.ui.composables
 
 import androidx.compose.foundation.Image
 
@@ -16,12 +16,12 @@ import com.PlannerMate.R
 
 @Composable
 fun CircularImageFromResource(
-    idImageResource: Int, contentDescription: String, size: Dp = Dp(250f)
+    idImageResource: Int, contentDescriptionription: String, size: Dp = Dp(250f)
 ) {
 
     Image(
         painter = painterResource(idImageResource),
-        contentDescription = contentDescription,
+        contentDescriptionription = contentDescriptionription,
         contentScale = ContentScale.Crop, //Si la imagen no es cuadrada
         modifier = Modifier
             .size(size)

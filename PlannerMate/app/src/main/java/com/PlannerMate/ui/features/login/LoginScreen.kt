@@ -21,9 +21,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.PlannerMate.R
 import com.PlannerMate.ui.theme.Purple40
-import com.pmdm.tienda.ui.composables.CircularImageFromResource
-import com.pmdm.tienda.ui.composables.TextNewAccount
-import com.pmdm.tienda.ui.features.login.components.UsuarioPassword
+import com.PlannerMate.ui.composables.CircularImageFromResource
+import com.PlannerMate.ui.composables.TextNewAccount
+import com.PlannerMate.ui.features.login.components.UserPassword
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -32,19 +32,19 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
 
-    clienteUiState: LoginUiState,
-    validacionLoginUiState: ValidacionLoginUiState,
-    mostrarSnackbarHostState: Boolean,
+    clientUiState: LoginUiState,
+    validationLoginUiState: LoginValidationUiState,
+    showSnackbarHostState: Boolean,
     onLoginEvent: (LoginEvent) -> Unit,
-    onMostrarSnackBar: () -> Unit,
-    onNavigateToPerfil: ((contacto: String) -> Unit)? = null
+    onShowSnackbar: () -> Unit,
+    onNavigateToProfile: ((contact: String) -> Unit)? = null
 
 ) {
 
 //    var mensaje by remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
-    var recordarmeState by remember { mutableStateOf(false) }
+    var rememberMeState by remember { mutableStateOf(false) }
 
     Box() {
         Column(
@@ -53,16 +53,16 @@ fun LoginScreen(
             modifier = Modifier.padding(20.dp)
         ) {
             CircularImageFromResource(
-                idImageResource = R.drawable.logo, contentDescription = "Imagen Login"
+                idImageResource = R.drawable.logo, contentDescriptionription = "Imagen Login"
             )
 
 
-            UsuarioPassword(modifier = Modifier.fillMaxWidth(),
-                loginState = clienteUiState.contacto,
-                passwordState = clienteUiState.password,
-                validacionLogin = validacionLoginUiState.validacionLogin,
-                validacionPassword = validacionLoginUiState.validacionPassword,
-                recordarmeState = recordarmeState,
+            UserPassword(modifier = Modifier.fillMaxWidth(),
+                loginState = clientUiState.contact,
+                passwordState = clientUiState.password,
+                validationLogin = validationLoginUiState.validationLogin,
+                validationPassword = validationLoginUiState.validationPassword,
+                rememberMeState = rememberMeState,
                 onValueChangeLogin = {
                     onLoginEvent(LoginEvent.LoginChanged(it))
                 },
@@ -70,16 +70,16 @@ fun LoginScreen(
                     onLoginEvent(LoginEvent.PasswordChanged(it))
                 },
 
-                onCheckedChanged = { recordarmeState = it },
+                onCheckedChanged = { rememberMeState = it },
 
-                onClickLogearse = {
+                onClickLogIn = {
 
-                    onLoginEvent(LoginEvent.OnClickLogearse(onNavigateToPerfil))
+                    onLoginEvent(LoginEvent.OnClickLogin(onNavigateToProfile))
 
-                    onMostrarSnackBar()
+                    onShowSnackbar()
                     scope.launch() {
                         delay(4000)
-                        onMostrarSnackBar()
+                        onShowSnackbar()
 
                         //onNavigateToTienda?.invoke(usuarioUiState.login)
 
@@ -87,16 +87,16 @@ fun LoginScreen(
                 })
 
         }
-        if (mostrarSnackbarHostState) {
-            var mensaje = ""
-            if (validacionLoginUiState.hayError) mensaje = validacionLoginUiState.mensajeError ?: ""
-            else if (clienteUiState.estaLogeado) mensaje =
-                "Entrando a la APP con usuario ${clienteUiState.contacto}"
-            else mensaje = "Error, no existe el usuario o contraseña incorrecta"
+        if (showSnackbarHostState) {
+            var message = ""
+            if (validationLoginUiState.hasError) message = validationLoginUiState.errorMessage ?: ""
+            else if (clientUiState.isLoggedIn) message =
+                "Entrando a la APP con usuario ${clientUiState.contact}"
+            else message = "Error, no existe el usuario o contraseña incorrecta"
             Snackbar(
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
-                Text(text = mensaje)
+                Text(text = message)
             }
         }
     }
@@ -179,4 +179,3 @@ fun LoginScreen(
 //        }
 //    }
 //}
-

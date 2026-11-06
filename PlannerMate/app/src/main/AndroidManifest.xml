@@ -29,14 +29,14 @@
         android:label="@string/PlannerMate"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ProyectoBase"
+        android:theme="@style/Theme.ProjectBase"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name="com.PlannerMate.ui.views.MainActivity"
             android:exported="true"
             android:label="@string/PlannerMate"
-            android:theme="@style/Theme.ProyectoBase">
+            android:theme="@style/Theme.ProjectBase">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

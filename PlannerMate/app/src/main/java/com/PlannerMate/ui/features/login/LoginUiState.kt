@@ -1,18 +1,18 @@
 package com.PlannerMate.ui.features.login
 
 data class LoginUiState(
-    val idCliente : Int,
-    val nombre : String,
-    val contacto: String,
+    val clientId : Int,
+    val name : String,
+    val contact: String,
     val password: String,
-    val estaLogeado: Boolean
+    val isLoggedIn: Boolean
 ) {
     constructor() : this(
-        idCliente = 0,
-        nombre = "",
-        contacto = "",
+        clientId = 0,
+        name = "",
+        contact = "",
         password = "",
-        estaLogeado=false
+        isLoggedIn=false
     )
 }
 

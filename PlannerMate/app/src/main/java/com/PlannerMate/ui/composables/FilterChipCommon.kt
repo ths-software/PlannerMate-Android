@@ -1,4 +1,4 @@
-package com.pmdm.tienda.ui.composables
+package com.PlannerMate.ui.composables
 
 
 import androidx.compose.foundation.layout.Column
@@ -30,28 +30,28 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun FilterChipWithIcon(
     modifier: Modifier = Modifier,
-    seleccionadoState: Boolean = true,
-    textoState: String = "Etiqueta",
+    selectedState: Boolean = true,
+    textState: String = "Etiqueta",
     iconState: ImageVector? = null,
     onClick: () -> Unit = {}
 ) {
     FilterChip(
         modifier = modifier.then(Modifier.height(FilterChipDefaults.Height)),
-        selected = seleccionadoState,
+        selected = selectedState,
         onClick = onClick,
-        label = { Text(textoState) },
+        label = { Text(textState) },
         leadingIcon = {
-            if (seleccionadoState) {
+            if (selectedState) {
                 Icon(
                     imageVector = Icons.Filled.Done,
-                    contentDescription = "Icono seleccionado",
+                    contentDescriptionription = "Icono seleccionado",
                     modifier = Modifier.size(FilterChipDefaults.IconSize)
                 )
             } else {
                 iconState?.let {
                     Icon(
                         imageVector = it,
-                        contentDescription = "Icono asociado a la etiqueta",
+                        contentDescriptionription = "Icono asociado a la etiqueta",
                         modifier = Modifier.size(FilterChipDefaults.IconSize)
                     )
                 }
@@ -64,15 +64,15 @@ fun FilterChipWithIcon(
 @Composable
 fun FilterChipWithoutIcon(
     modifier: Modifier = Modifier,
-    seleccionadoState: Boolean,
-    textoState: String = "Etiqueta",
+    selectedState: Boolean,
+    textState: String = "Etiqueta",
     onClick: () -> Unit = {}
 ) {
     FilterChip(
         modifier = modifier.then(Modifier.height(FilterChipDefaults.Height)),
-        selected = seleccionadoState,
+        selected = selectedState,
         onClick = onClick,
-        label = { Text(textoState, textAlign= TextAlign.Center) }
+        label = { Text(textState, textAlign= TextAlign.Center) }
     )
 }
 
@@ -86,14 +86,14 @@ fun FilterChipTest() {
     Column()
     {
         FilterChipWithIcon(
-            seleccionadoState = selected,
-            textoState = "Descripción",
+            selectedState = selected,
+            textState = "Descripción",
             iconState = Icons.Filled.Home,
             onClick = { selected = !selected }
         )
         FilterChipWithoutIcon(
-            seleccionadoState = selected2,
-            textoState = "XL",
+            selectedState = selected2,
+            textState = "XL",
             onClick = { selected2 = !selected2 }
         )
     }
