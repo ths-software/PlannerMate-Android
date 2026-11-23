@@ -8,3 +8,8 @@ El proyecto de Android fue creado usando el IDE de **Android Studio**, con el le
 PlannerMate Android trabaja en conjunto con PlannerMate escritorio, a través de una API creada en **SpringBoot**, usando el cliente **Retrofit** para el consumo de dicha API.
 
 PlannerMate Android ha sido desarrollada siguiendo las recomendaciones y buenas prácticas de desarrollo de Android. Utiliza el patrón arquitectónico ViewModel y componentes de navegación para organizar la aplicación, favoreciendo una estructura modular, escalable y mantenible.
+
+## Código fuente
+
+El código fuente de PlannerMate Android está disponible en este repositorio
+para su consulta y revisión técnica.
