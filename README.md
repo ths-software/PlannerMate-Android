@@ -15,8 +15,8 @@ El código fuente de PlannerMate Android está disponible en este repositorio
 para su consulta y revisión técnica.
 
 Estructura principal:
-[App](./app/src/main/java/com/PlannerMate/PlannerMateApp.kt)
-[models](./app/src/main/java/com/PlannerMate/models)
-[UI/Navigation](./app/src/main/java/com/PlannerMate/ui)
-[Data](./app/src/main/java/com/PlannerMate/data)
-[Inyección de dependencias](./app/src/main/java/com/PlannerMate/di/AppModule.kt)
+[App](PlannerMate/app/src/main/java/com/PlannerMate/PlannerMateApp.kt)
+[models](PlannerMate/app/src/main/java/com/PlannerMate/models)
+[UI/Navigation](PlannerMate/app/src/main/java/com/PlannerMate/ui)
+[Data](PlannerMate/app/src/main/java/com/PlannerMate/data)
+[Inyección de dependencias](PlannerMate/app/src/main/java/com/PlannerMate/di/AppModule.kt)
